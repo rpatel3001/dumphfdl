@@ -114,6 +114,10 @@ int32_t soapysdr_input_init(struct input *input) {
 			return -1;
 		}
 	}
+	if(SoapySDRDevice_setBandwidth(sdr, SOAPY_SDR_RX, 0, 5000000) != 0) {
+		fprintf(stderr, "%s: setBandwidth failed: %s\n", cfg->source, SoapySDRDevice_lastError());
+		return -1;
+	}
 
 	// If both --gain and --soapy-gain are present, the latter takes precedence.
 	// If neither is present, auto gain is enabled.
