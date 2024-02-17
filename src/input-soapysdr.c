@@ -85,7 +85,7 @@ struct sample_format_search_result soapysdr_choose_sample_format(SoapySDRDevice 
 int32_t soapysdr_input_init(struct input *input) {
 	ASSERT(input != NULL);
 	struct soapysdr_input *soapysdr_input = container_of(input, struct soapysdr_input, input);
-	soapysdr_verbose_device_search();
+	//soapysdr_verbose_device_search();
 
 	struct input_cfg *cfg = input->config;
 	SoapySDRDevice *sdr = SoapySDRDevice_makeStrArgs(cfg->source);
