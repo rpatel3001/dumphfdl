@@ -270,6 +270,7 @@ static void usage() {
 	describe_option("--freq-correction <float>", "Set freq correction (ppm)", 1);
 	describe_option("--freq-offset <float>", "Frequency offset in kHz (to be used with upconverters)", 1);
 	describe_option("--antenna <string>", "Set antenna port selection (default: RX)", 1);
+	describe_option("--bandwidth <float>", "Set front end bandwidth (default: auto)", 1);
 #endif
 	fprintf(stderr, "\niq_file_options:\n");
 	describe_option("--iq-file <string>", "Read I/Q samples from file (use \"-\" to read from standard input)", 1);
@@ -344,6 +345,7 @@ int32_t main(int32_t argc, char **argv) {
 #define OPT_DEVICE_SETTINGS 27
 #define OPT_FREQ_OFFSET 28
 #define OPT_READ_BUFFER_SIZE 29
+#define OPT_BANDWIDTH 30
 
 #define OPT_OUTPUT 40
 #define OPT_OUTPUT_QUEUE_HWM 41
@@ -396,6 +398,7 @@ int32_t main(int32_t argc, char **argv) {
 		{ "device-settings",    required_argument,  NULL,   OPT_DEVICE_SETTINGS },
 		{ "freq-offset",        required_argument,  NULL,   OPT_FREQ_OFFSET },
 		{ "read-buffer-size",   required_argument,  NULL,   OPT_READ_BUFFER_SIZE },
+		{ "bandwidth",          required_argument,  NULL,   OPT_BANDWIDTH },
 		{ "output",             required_argument,  NULL,   OPT_OUTPUT },
 		{ "output-queue-hwm",   required_argument,  NULL,   OPT_OUTPUT_QUEUE_HWM },
 		{ "utc",                no_argument,        NULL,   OPT_UTC },
@@ -491,6 +494,11 @@ int32_t main(int32_t argc, char **argv) {
 				break;
 			case OPT_ANTENNA:
 				input_cfg->antenna = optarg;
+				break;
+			case OPT_BANDWIDTH:
+				if(parse_double(optarg, &input_cfg->bandwidth) == false) {
+					input_cfg->bandwidth = -1.0;
+				}
 				break;
 			case OPT_DEVICE_SETTINGS:
 				input_cfg->device_settings = optarg;

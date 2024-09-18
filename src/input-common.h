@@ -28,6 +28,7 @@ struct input_cfg {
 	char *source;
 	char *gain_elements;
 	char *antenna;
+	double bandwidth;
 	char *device_settings;
 	double gain;
 	double correction;

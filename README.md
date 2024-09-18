@@ -344,6 +344,7 @@ dumphfdl --soapysdr driver=sdrplay --sample-rate 250000 8834 8885 8894 8912 8927
 
 - No particular device is specified, only the driver name - this causes the SoapySDR library to pick the first available SDRPlay device of the given type (sdrplay).
 - No gain is specified - this causes auto gain control (AGC) to be used.
+- No bandwidth is specified - this causes the default to be used (greatest bandwidth less than the sample rate).
 - No center frequency is specified - the program will compute one automatically, based on the given list of channel frequencies.
 - No output is specified - the program will print decoded messages to the terminal (standard output).
 - Sampling rate is set to 250000 samples per second (this parameter is mandatory).
@@ -360,7 +361,7 @@ Sampling rate is important. First of all, it must be actually supported by your 
 
 While some radios may support a wider set of sample rates than the SoapySDR driver reports, others do not. Specifying an unsupported sampling rate often causes it to be silently accepted by the device, but in fact it will operate at a different rate (probably the nearest one supported). The program then won't be able to decode anything, since the time scale in the received signal will be wrong. So **always make sure to pick a supported sampling rate**. From the above example it appears that we can use any of the following values for `--sample-rate` option: 250000, 500000, 1000000, 2000000, 2048000, 6000000, 7000000, 8000000, 9000000 and 10000000 samples per second.
 
-You should also pay attention to the available filter bandwidths. The radio performs bandpass filtering on the input signal before sampling it to prevent aliasing. It shall automatically pick the correct filter bandwidth that does not exceed the configured sampling rate. This means that the band edges will be somewhat attenuated and the useful bandwidth will therefore be smaller than the sampling rate - about 80% of its value. Therefore choose your HFDL channel frequencies wisely, so that they don't fall close to the edges of the receiver band, outside of the filter bandwidth. In the above example, HFDL channels span across 8977-8834=143 kHz which means that a sampling rate of 250000 samples per second is enough to cover them all (the device will pick a filter bandwidth of 200 kHz for this rate).
+You should also pay attention to the available filter bandwidths. The radio performs bandpass filtering on the input signal before sampling it to prevent aliasing. By default it shall automatically pick the correct filter bandwidth that does not exceed the configured sampling rate. This means that the band edges will be somewhat attenuated and the useful bandwidth will therefore be smaller than the sampling rate - about 80% of its value. Therefore choose your HFDL channel frequencies wisely, so that they don't fall close to the edges of the receiver band, outside of the filter bandwidth. In the above example, HFDL channels span across 8977-8834=143 kHz which means that a sampling rate of 250000 samples per second is enough to cover them all (the device will pick a filter bandwidth of 200 kHz for this rate). Choosing a bandwidth greater than the sampling rate can result in aliasing.
 
 ### Selecting a particular device
 
@@ -426,6 +427,14 @@ This might be useful for radios that have more than one antenna port. `SoapySDRU
 
 ```sh
 dumphfdl --antenna <antenna_port_name> ...
+```
+
+### Choosing bandwidth
+
+This might be useful for radios that have sparse filter ranges. `SoapySDRUtil` will tell the available options.
+
+```sh
+dumphfdl --bandwidth <bandwidth_setting> ...
 ```
 
 ### Special device settings

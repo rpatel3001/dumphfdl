@@ -166,6 +166,13 @@ int32_t soapysdr_input_init(struct input *input) {
 		}
 	}
 	fprintf(stderr, "%s: using antenna %s\n", cfg->source, SoapySDRDevice_getAntenna(sdr, SOAPY_SDR_RX, 0));
+	if(cfg->bandwidth != -1.0) {
+		if(SoapySDRDevice_setBandwidth(sdr, SOAPY_SDR_RX, 0, cfg->bandwidth) != 0) {
+			fprintf(stderr, "could not select bandwidth %f: %s\n", cfg->bandwidth, SoapySDRDevice_lastError());
+			return -1;
+		}
+	}
+	fprintf(stderr, "%s: using bandwidth %f\n", cfg->source, SoapySDRDevice_getBandwidth(sdr, SOAPY_SDR_RX, 0));
 
 	if(cfg->device_settings != NULL) {
 		SoapySDRKwargs settings_param = SoapySDRKwargs_fromString(cfg->device_settings);
