@@ -23,7 +23,10 @@ void csdr_fft_destroy() {
 FFT_PLAN_T* csdr_make_fft_c2c(int32_t size, float complex* input, float complex* output, int32_t forward, int32_t benchmark) {
 	NEW(FFT_PLAN_T, plan);
 	// fftwf_complex is binary compatible with float complex
-	plan->plan = fftwf_plan_dft_1d(size, (fftwf_complex *)input, (fftwf_complex *)output, forward ? FFTW_FORWARD : FFTW_BACKWARD, benchmark ? FFTW_MEASURE : FFTW_ESTIMATE);
+        fftwf_set_timelimit(300.0);
+        fftwf_import_wisdom_from_filename("/wisdom");
+	plan->plan = fftwf_plan_dft_1d(size, (fftwf_complex *)input, (fftwf_complex *)output, forward ? FFTW_FORWARD : FFTW_BACKWARD, FFTW_PATIENT);
+        fftwf_export_wisdom_to_filename("/wisdom");
 	plan->size = size;
 	plan->input = input;
 	plan->output = output;
